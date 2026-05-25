@@ -14,6 +14,15 @@ from ai_devex.reporter import generate_report, write_report
 from ai_devex.scanner import GitScanner
 
 
+def _try_import_mcp() -> bool:
+    """Check if the MCP extra is installed."""
+    try:
+        import mcp  # noqa: F401
+        return True
+    except ImportError:
+        return False
+
+
 @click.group(invoke_without_command=True)
 @click.version_option(version=__version__, prog_name="ai-devex")
 @click.pass_context
@@ -213,6 +222,21 @@ def status() -> None:
         click.echo("Tools:")
         for tool, count in tool_summary.items():
             click.echo(f"  - {tool}: {count}")
+
+
+@main.command()
+def mcp() -> None:
+    """Start the ai-devex MCP server (stdio transport)."""
+    if not _try_import_mcp():
+        click.echo(
+            "Error: MCP support is not installed. "
+            "Run: pip install 'ai-devex[mcp]'"
+        )
+        sys.exit(1)
+
+    from ai_devex.mcp_server import main as mcp_main
+
+    mcp_main()
 
 
 if __name__ == "__main__":

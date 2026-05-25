@@ -15,6 +15,12 @@ When you use tools like Cursor, Claude, Copilot, or ChatGPT to write code, `ai-d
 pip install ai-devex
 ```
 
+With MCP server support:
+
+```bash
+pip install "ai-devex[mcp]"
+```
+
 Or install from source:
 
 ```bash
@@ -86,6 +92,60 @@ Show current tracking status, including entry counts and tool usage.
 - `.ai-devex.jsonl`: Append-only log of AI-assisted sessions
 
 The `report` command reads these files, optionally scans your git history for commits mentioning AI tools, and renders a markdown report using a built-in template.
+
+## MCP Server
+
+ai-devex exposes an MCP server so AI assistants (Cursor, Claude Desktop, etc.) can read and write tracking data directly.
+
+### Start the server
+
+```bash
+ai-devex mcp
+```
+
+This starts a stdio transport server.
+
+### Tools exposed
+
+- `log_session(description, tools, files, commit, tags)` — Log an AI-assisted session from the IDE
+- `generate_ai_report(max_commits, no_scan)` — Generate the markdown report on demand
+- `scan_commits(max_count)` — Scan git history for AI-related commits
+
+### Resources exposed
+
+- `ai-devex://config` — Contents of `.ai-devex.toml`
+- `ai-devex://log` — Contents of `.ai-devex.jsonl`
+- `ai-devex://status` — JSON summary of entries, tools, and tags
+
+### Cursor configuration
+
+Add to `.cursor/mcp.json` in your project or globally:
+
+```json
+{
+  "mcpServers": {
+    "ai-devex": {
+      "command": "ai-devex",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+### Claude Desktop configuration
+
+Add to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "ai-devex": {
+      "command": "ai-devex",
+      "args": ["mcp"]
+    }
+  }
+}
+```
 
 ## Example Report
 

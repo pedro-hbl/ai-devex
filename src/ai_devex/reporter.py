@@ -123,7 +123,7 @@ def generate_report(
         tag_summary=tag_summary,
         tool_names=list(tool_summary.keys()),
         scanned_commits=scanned_commits,
-        version="0.1.0",
+        version="0.2.0",
     )
 
 
