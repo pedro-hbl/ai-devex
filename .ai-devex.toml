@@ -1,0 +1,6 @@
+[project]
+name = 'ai-devex'
+description = 'CLI tool to track and report AI-assisted development in repositories'
+owner = 'Pedro Henrique Lopes'
+repo_url = 'https://github.com/pedro-hbl/ai-devex'
+log_file = '.ai-devex.jsonl'
